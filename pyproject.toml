@@ -1,0 +1,88 @@
+[tool.poetry]
+name = "wg"
+version = "0.0.0"
+description = "Command line tool for quick API testing"
+authors = ["Daniel Hjertholm <daniel.hjertholm@icloud.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typer = {extras = ["colorama", "shellingham"], version = "^0.4.1"}
+
+[tool.poetry.dev-dependencies]
+black = "*"
+coverage = { version = "*", extras = ['toml'] }
+flake8 = "*"
+flake8-bugbear = "*"
+isort = ">= 5"
+mock = "*"
+pre-commit = "*"
+pytest = ">= 6"  # needs pyproject.toml support
+pytest-cov = "*"
+pytest-integration = "*"
+
+[tool.poetry.scripts]
+wg = "wg.wg:app"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
+pattern = "^(?P<base>\\d+\\.\\d+\\.\\d+)(-?((?P<stage>[a-zA-Z]+)\\.?(?P<revision>\\d+)?))?$"
+
+[tool.isort]
+profile = "black"
+line_length = 100
+known_first_party = []
+
+[tool.black]
+line-length = 100
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | profiling
+)/
+'''
+
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_lines = [
+              "pragma: no cover",
+              "raise AssertionError",
+              "raise NotImplementedError",
+              "if verbose:",
+              "if 0:",
+              "if False:",
+              ]
+skip_covered = true
+show_missing = true
+precision = 2
+
+[tool.coverage.run]
+branch = true
+source = ["wg"]
+
+[tool.pytest.ini_options]
+log_file = "pytest.log"
+log_level = "DEBUG"
+log_file_format = "%(asctime)s - %(name)s - %(levelname)s: %(message)s"
+norecursedirs = "_build tmp*  __pycache__ src prof wheel_files"
+markers = [
+  "integration: Mark test as an integration test",
+]
+filterwarnings = [
+  "ignore:PyArray_GetNumericOps.*",
+  "ignore:PyArray_SetNumericOps.*",
+]
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry.core.masonry.api"
