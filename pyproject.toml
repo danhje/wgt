@@ -6,7 +6,8 @@ authors = ["Daniel Hjertholm <daniel.hjertholm@icloud.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-typer = {extras = ["colorama", "shellingham"], version = "^0.4.1"}
+requests = "*"
+toolz = "*"
 
 [tool.poetry.dev-dependencies]
 black = "*"
@@ -21,7 +22,7 @@ pytest-cov = "*"
 pytest-integration = "*"
 
 [tool.poetry.scripts]
-wg = "wg.wg:app"
+wg = "wg.wg:main"
 
 [tool.poetry-dynamic-versioning]
 enable = true
