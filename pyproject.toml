@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wg"
-version = "0.0.0"
+version = "0.1.0"
 description = "Command line tool for quick API testing"
 authors = ["Daniel Hjertholm <daniel.hjertholm@icloud.com>"]
 
