@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "wg"
+name = "wgt"
 version = "0.1.0"
 description = "Command line tool for quick API testing"
 authors = ["Daniel Hjertholm <daniel.hjertholm@icloud.com>"]
@@ -22,7 +22,7 @@ pytest-cov = "*"
 pytest-integration = "*"
 
 [tool.poetry.scripts]
-wg = "wg.wg:main"
+wgt = "wgt.wgt:main"
 
 [tool.poetry-dynamic-versioning]
 enable = true
@@ -68,7 +68,7 @@ precision = 2
 
 [tool.coverage.run]
 branch = true
-source = ["wg"]
+source = ["wgt"]
 
 [tool.pytest.ini_options]
 log_file = "pytest.log"

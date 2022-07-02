@@ -8,12 +8,12 @@ from requests import JSONDecodeError
 from toolz import compose_left
 
 components = {
-    "protocol": os.getenv("WG_DEFAULT_PROTOCOL", "http://"),
-    "host": os.getenv("WG_DEFAULT_HOST", "localhost"),
-    "port": os.getenv("WG_DEFAULT_PORT", ""),
-    "path": os.getenv("WG_DEFAULT_PATH", "/"),
-    "query": os.getenv("WG_DEFAULT_QUERY", ""),
-    "fragment": os.getenv("WG_DEFAULT_FRAGMENT", ""),
+    "protocol": os.getenv("WGT_DEFAULT_PROTOCOL", "http://"),
+    "host": os.getenv("WGT_DEFAULT_HOST", "localhost"),
+    "port": os.getenv("WGT_DEFAULT_PORT", ""),
+    "path": os.getenv("WGT_DEFAULT_PATH", "/"),
+    "query": os.getenv("WGT_DEFAULT_QUERY", ""),
+    "fragment": os.getenv("WGT_DEFAULT_FRAGMENT", ""),
 }
 
 pattern = re.compile(
