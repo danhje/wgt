@@ -5,7 +5,7 @@ description = "Command line tool for quick API testing"
 authors = ["Daniel Hjertholm <daniel.hjertholm@icloud.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.9"
 requests = "*"
 toolz = "*"
 
@@ -17,7 +17,7 @@ flake8-bugbear = "*"
 isort = ">= 5"
 mock = "*"
 pre-commit = "*"
-pytest = ">= 6"  # needs pyproject.toml support
+pytest = ">= 6"
 pytest-cov = "*"
 pytest-integration = "*"
 
