@@ -49,9 +49,16 @@ def generate_url(args: list[str]) -> str:
 
 
 def fetch_and_print(url: str) -> None:
-    print(f"Fetching {url}")
-    resp = requests.get(url)
-    resp.raise_for_status()
+    print(f"Fetching {url}", flush=True)
+    try:
+        resp = requests.get(url)
+        resp.raise_for_status()
+    except Exception as e:
+        msg = getattr(e, "message", str(e))
+        if "Name or service not known" in msg:
+            msg = "Name or service not known"
+        sys.stderr.write(msg)
+        exit(1)
     try:
         pprint(resp.json())
     except JSONDecodeError:

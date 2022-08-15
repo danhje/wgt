@@ -1,6 +1,7 @@
 import mock
 import pytest
 from requests import JSONDecodeError
+from requests.exceptions import ConnectionError as RConnectionError
 
 from wgt import wgt
 
@@ -85,3 +86,12 @@ def test_fetch_and_print_text(capsys):
     wgt.fetch_and_print("http://danielhjertholm.me")
     captured = capsys.readouterr()
     assert "<html>Awesome page</html>" in captured.out
+
+
+@mock.patch("requests.get", mock.Mock(side_effect=RConnectionError("Name or service not known")))
+def test_fetch_and_print_exception(capsys):
+    with pytest.raises(SystemExit):
+        wgt.fetch_and_print("http://some.invalid.url")
+    captured = capsys.readouterr()
+    assert captured.out == "Fetching http://some.invalid.url\n"
+    assert "Name or service not known" in captured.err
