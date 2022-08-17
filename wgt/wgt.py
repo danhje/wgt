@@ -3,10 +3,9 @@ from __future__ import annotations
 import os
 import re
 import sys
-from pprint import pprint
 
 import requests
-from requests import JSONDecodeError
+import rich
 from toolz import compose_left
 
 components = {
@@ -60,8 +59,8 @@ def fetch_and_print(url: str) -> None:
         sys.stderr.write(msg)
         exit(1)
     try:
-        pprint(resp.json())
-    except JSONDecodeError:
+        rich.print_json(data=resp.json(), highlight=True)
+    except requests.JSONDecodeError:
         print(resp.text)
 
 

@@ -1,3 +1,5 @@
+import inspect
+
 import mock
 import pytest
 from requests import JSONDecodeError
@@ -71,9 +73,22 @@ def test_generate_url_combinations():
 
 @mock.patch("requests.get", lambda *args: mock.Mock(json=lambda: {"data": [1, 2, 3]}))
 def test_fetch_and_print_json(capsys):
-    wgt.fetch_and_print("http://danielhjertholm.me")
+    wgt.fetch_and_print("http://some.url/returning/json")
     captured = capsys.readouterr()
-    assert "{'data': [1, 2, 3]}" in captured.out
+    assert (
+        inspect.cleandoc(
+            """
+    {
+      "data": [
+        1,
+        2,
+        3
+      ]
+    }
+    """
+        )
+        in captured.out
+    )
 
 
 @mock.patch(
@@ -83,7 +98,7 @@ def test_fetch_and_print_json(capsys):
     ),
 )
 def test_fetch_and_print_text(capsys):
-    wgt.fetch_and_print("http://danielhjertholm.me")
+    wgt.fetch_and_print("http://some.url/returning/text")
     captured = capsys.readouterr()
     assert "<html>Awesome page</html>" in captured.out
 

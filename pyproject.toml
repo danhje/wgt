@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wgt"
-version = "0.1.2"
+version = "0.1.3"
 description = "Command line tool for quick API testing"
 authors = ["Daniel Hjertholm <daniel.hjertholm@icloud.com>"]
 
@@ -8,6 +8,7 @@ authors = ["Daniel Hjertholm <daniel.hjertholm@icloud.com>"]
 python = "^3.9"
 requests = "*"
 toolz = "*"
+rich = "*"
 
 [tool.poetry.dev-dependencies]
 black = "*"
