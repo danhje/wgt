@@ -21,6 +21,7 @@ pre-commit = "*"
 pytest = ">= 6"
 pytest-cov = "*"
 pytest-integration = "*"
+pytest-randomly = "*"
 
 [tool.poetry.scripts]
 wgt = "wgt.wgt:main"
