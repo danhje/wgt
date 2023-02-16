@@ -22,7 +22,7 @@ pattern = re.compile(
     (?P<protocol>\w{1,9}:\/\/) |
     (?P<port>:\d+) |
     (?P<path>(\/[a-zA-Z0-9&%_-]+)+) |
-    (?P<query>\?[a-zA-Z0-9&%=_-]+) |
+    (?P<query>\?[a-zA-Z0-9&,%=_-]+) |
     (?P<fragment>\#[a-zA-Z0-9&=%_-]+) |
     (?P<host>[^\s\/?#:]+) |
 """

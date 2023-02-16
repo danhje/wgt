@@ -50,7 +50,7 @@ def test_generate_url_path(path):
     assert url == f"https://127.0.0.1:8080{path.rstrip('/')}?json=1#section"
 
 
-@pytest.mark.parametrize("query", ("?q=test", "?start=1656502991&end=1656503004"))
+@pytest.mark.parametrize("query", ("?q=test", "?start=1656502991&end=1656503004", "?q=1,2"))
 def test_generate_url_query(query):
     url = wgt.generate_url([query])
     assert url == f"https://127.0.0.1:8080/data{query}#section"
