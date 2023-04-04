@@ -29,6 +29,11 @@ pattern = re.compile(
 )
 
 
+def eprint(*args, **kwargs):
+    """Print to stderr."""
+    print(*args, file=sys.stderr, **kwargs, flush=True)
+
+
 def get_args(args: list[str] | None = None) -> list[str]:
     if args:
         return args
@@ -48,7 +53,7 @@ def generate_url(args: list[str]) -> str:
 
 
 def fetch_and_print(url: str) -> None:
-    print(f"Fetching {url}", flush=True)
+    eprint(f"Fetching {url}")
     try:
         resp = requests.get(url)
         resp.raise_for_status()
@@ -56,7 +61,7 @@ def fetch_and_print(url: str) -> None:
         msg = getattr(e, "message", str(e))
         if "Name or service not known" in msg:
             msg = "Name or service not known"
-        sys.stderr.write(msg)
+        eprint(msg)
         exit(1)
     try:
         rich.print_json(data=resp.json(), highlight=True)
