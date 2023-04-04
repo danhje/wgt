@@ -108,5 +108,5 @@ def test_fetch_and_print_exception(capsys):
     with pytest.raises(SystemExit):
         wgt.fetch_and_print("http://some.invalid.url")
     captured = capsys.readouterr()
-    assert captured.out == "Fetching http://some.invalid.url\n"
+    assert "Fetching http://some.invalid.url" in captured.err
     assert "Name or service not known" in captured.err
