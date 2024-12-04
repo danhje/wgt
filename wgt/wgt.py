@@ -29,7 +29,7 @@ pattern = re.compile(
 )
 
 
-def eprint(*args, **kwargs):
+def eprint(*args, **kwargs) -> None:
     """Print to stderr."""
     print(*args, file=sys.stderr, **kwargs, flush=True)
 
@@ -55,7 +55,7 @@ def generate_url(args: list[str]) -> str:
 def fetch_and_print(url: str) -> None:
     eprint(f"Fetching {url}")
     try:
-        resp = requests.get(url)
+        resp = requests.get(url, timeout=10.0)
         resp.raise_for_status()
     except Exception as e:
         msg = getattr(e, "message", str(e))

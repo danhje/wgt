@@ -1,3 +1,3 @@
-from importlib import metadata
+import importlib.metadata
 
-__version__ = metadata.version("wheel")
+__version__ = importlib.metadata.version(__name__)
