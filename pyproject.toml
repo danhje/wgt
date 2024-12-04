@@ -1,76 +1,96 @@
-[tool.poetry]
+[project]
 name = "wgt"
-version = "0.2.0"
+dynamic = ["version"]
 description = "Command line tool for quick API testing"
-authors = ["Daniel Hjertholm <daniel.hjertholm@icloud.com>"]
+authors = [{name="Daniel Hjertholm", email="8713259+danhje@users.noreply.github.com"}]
+requires-python = ">=3.9"
+dependencies = [
+  "requests",
+  "toolz",
+  "rich",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-requests = "*"
-toolz = "*"
-rich = "*"
+[tool.uv]
+dev-dependencies = [
+  "pytest",
+  "pytest-randomly",
+  "ruff",
+  "pre-commit",
+]
 
-[tool.poetry.dev-dependencies]
-black = "*"
-coverage = { version = "*", extras = ['toml'] }
-flake8 = "*"
-flake8-bugbear = "*"
-isort = ">= 5"
-mock = "*"
-pre-commit = "*"
-pytest = ">= 6"
-pytest-cov = "*"
-pytest-integration = "*"
-pytest-randomly = "*"
-
-[tool.poetry.scripts]
+[project.scripts]
 wgt = "wgt.wgt:main"
 
-[tool.poetry-dynamic-versioning]
-enable = true
-vcs = "git"
-style = "semver"
-pattern = "^(?P<base>\\d+\\.\\d+\\.\\d+)(-?((?P<stage>[a-zA-Z]+)\\.?(?P<revision>\\d+)?))?$"
+[tool.setuptools_scm]
+version_scheme="release-branch-semver"
+local_scheme = "no-local-version"
 
-[tool.isort]
-profile = "black"
-line_length = 100
-known_first_party = []
+[tool.ruff]
+target-version = "py39"
 
-[tool.black]
-line-length = 100
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.git
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-  | profiling
-)/
-'''
+line-length = 120
 
-[tool.coverage.report]
-# Regexes for lines to exclude from consideration
-exclude_lines = [
-              "pragma: no cover",
-              "raise AssertionError",
-              "raise NotImplementedError",
-              "if verbose:",
-              "if 0:",
-              "if False:",
-              ]
-skip_covered = true
-show_missing = true
-precision = 2
+[tool.ruff.lint]
 
-[tool.coverage.run]
-branch = true
-source = ["wgt"]
+select = [
+  "A", # flake8-builtins
+  "ANN", # flake8-annotations
+  "ARG", # flake8-unused-arguments
+  "B", # flake8-bugbear
+  "C4", # flake8-comprehensions
+  "C90", # mccabe
+  "COM", # flake8-commas
+  "DTZ", # flake8-datetimez
+  "E", "W", # pycodestyle
+  "F", # Pyflakes
+  "G", # flake8-logging-format
+  "I", # isort
+  "LOG", # flake8-logging
+  "N", # pep8-nameing
+  "PIE", # flake8-pie
+  "RUF", # Ruff specific rules
+  "S", # flake8-bandit
+  "SIM", # flake8-simplify
+  "T20", # flake8-print
+  "T100", # debug statements
+  "TCH", # flake8-type-checking
+  "UP", # pyupgrade
+  "YTT", # flake8-2020
+]
+
+ignore = ['ANN002', 'ANN003', 'S101', 'COM812', 'ANN401', 'T201']
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM", "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"]
+unfixable = []
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.pytest.ini_options]
 log_file = "pytest.log"
@@ -85,7 +105,6 @@ filterwarnings = [
   "ignore:PyArray_SetNumericOps.*",
 ]
 
-
 [build-system]
-requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=64", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"

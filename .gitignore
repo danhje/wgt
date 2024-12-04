@@ -77,5 +77,5 @@ local.dockerfile  # only for local pycharm use
 # pyenv
 .python-version
 
-# Poetry
-poetry.lock
+# uv
+uv.lock
