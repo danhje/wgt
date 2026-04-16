@@ -20,13 +20,37 @@ components = {
 pattern = re.compile(
     r"""(?x)
     (?P<protocol>\w{1,9}:\/\/) |
-    (?P<port>:\d+) |
+    (?P<port>:\w+) |
     (?P<path>(\/[a-zA-Z0-9&%_-]+)+) |
     (?P<query>\?[a-zA-Z0-9&,%=_-]+) |
     (?P<fragment>\#[a-zA-Z0-9&=%_-]+) |
     (?P<host>[^\s\/?#:]+) |
 """
 )
+
+
+def resolve_port(port: str) -> str:
+    """Resolve a port value.
+
+    If numeric, return as-is (e.g., ':8080' -> ':8080').
+    If named, look up {NAME}_SERVICE_PORT or {NAME}_PORT env vars.
+    """
+    # port comes with leading colon, e.g., ':8080' or ':psm'
+    value = port[1:]  # strip the leading ':'
+
+    if value.isdigit():
+        return port  # already numeric, return as-is
+
+    # Look up environment variables
+    name = value.upper()
+    for suffix in ("_SERVICE_PORT", "_PORT"):
+        env_value = os.getenv(f"{name}{suffix}")
+        if env_value:
+            return f":{env_value}"
+
+    # No env var found, return empty (or could raise error)
+    eprint(f"Warning: No {name}_SERVICE_PORT or {name}_PORT environment variable found")
+    return ""
 
 
 def eprint(*args, **kwargs) -> None:
@@ -49,6 +73,9 @@ def generate_url(args: list[str]) -> str:
     for arg in args:
         for match in pattern.finditer(arg):
             found |= {k: v for k, v in match.groupdict().items() if v is not None}
+    # Resolve named ports to actual port numbers
+    if "port" in found:
+        found["port"] = resolve_port(found["port"])
     return "".join((components | found).values())
 
 

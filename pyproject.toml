@@ -10,8 +10,8 @@ dependencies = [
   "rich",
 ]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
   "pytest",
   "pytest-randomly",
   "ruff",

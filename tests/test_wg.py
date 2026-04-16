@@ -44,6 +44,40 @@ def test_generate_url_port(port: str) -> None:
     assert url == f"https://127.0.0.1{port}/data?json=1#section"
 
 
+def test_generate_url_named_port_service_port(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test that :name resolves to {NAME}_SERVICE_PORT environment variable."""
+    monkeypatch.setenv("MYSERVICE_SERVICE_PORT", "3000")
+    url = wgt.generate_url([":myservice"])
+    assert url == "https://127.0.0.1:3000/data?json=1#section"
+
+
+def test_generate_url_named_port_fallback(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test that :name falls back to {NAME}_PORT when {NAME}_SERVICE_PORT is not set."""
+    monkeypatch.delenv("MYAPP_SERVICE_PORT", raising=False)
+    monkeypatch.setenv("MYAPP_PORT", "4000")
+    url = wgt.generate_url([":myapp"])
+    assert url == "https://127.0.0.1:4000/data?json=1#section"
+
+
+def test_generate_url_named_port_service_port_takes_precedence(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test that {NAME}_SERVICE_PORT takes precedence over {NAME}_PORT."""
+    monkeypatch.setenv("API_SERVICE_PORT", "5000")
+    monkeypatch.setenv("API_PORT", "6000")
+    url = wgt.generate_url([":api"])
+    assert url == "https://127.0.0.1:5000/data?json=1#section"
+
+
+def test_generate_url_named_port_not_found(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture) -> None:
+    """Test warning when no matching env var is found for named port."""
+    monkeypatch.delenv("UNKNOWN_SERVICE_PORT", raising=False)
+    monkeypatch.delenv("UNKNOWN_PORT", raising=False)
+    url = wgt.generate_url([":unknown"])
+    assert url == "https://127.0.0.1/data?json=1#section"  # No port in URL
+    captured = capsys.readouterr()
+    assert "UNKNOWN_SERVICE_PORT" in captured.err
+    assert "UNKNOWN_PORT" in captured.err
+
+
 @pytest.mark.parametrize("path", ("/path", "/a/longer/path", "/with/trailing/slash/"))
 def test_generate_url_path(path: str) -> None:
     url = wgt.generate_url([path])
