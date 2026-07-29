@@ -7,10 +7,10 @@ A simple API testing CLI. Features:
 
 ## Installation
 
-I recommend installing with pipx:
+I recommend installing with uv:
 
 ```
-pipx install wgt
+uv tool install wgt
 ```
 
 ## Usage

@@ -39,13 +39,14 @@ htmlcov
 # Translations
 *.mo
 
-# Mr Developer
+# IDEs
 .mr.developer.cfg
 .project
 .pydevproject
 .idea
 *.iml
 *.komodoproject
+.vscode
 
 # Complexity
 output/*.html
