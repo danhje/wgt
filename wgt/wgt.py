@@ -23,7 +23,7 @@ pattern = re.compile(
     (?P<protocol>\w{1,9}:\/\/) |
     (?P<port>:\w+) |
     (?P<path>(\/[a-zA-Z0-9&%_-]+)+) |
-    (?P<query>\?[a-zA-Z0-9&,%=_:+-]+) |
+    (?P<query>[?&][a-zA-Z0-9&,%=_:+-]+) |
     (?P<fragment>\#[a-zA-Z0-9&=%_-]+) |
     (?P<host>[^\s\/?#:]+) |
 """
@@ -71,13 +71,19 @@ def get_args(args: list[str] | None = None) -> list[str]:
 
 def generate_url(args: list[str]) -> str:
     found = {}
+    query_parts = []
     for arg in args:
         for match in pattern.finditer(arg):
-            found |= {k: v for k, v in match.groupdict().items() if v is not None}
+            groups = {k: v for k, v in match.groupdict().items() if v is not None}
+            if "query" in groups:
+                query_parts.append(groups.pop("query"))
+            found |= groups
+    if query_parts:
+        params = [p[1:] for p in query_parts]
+        found["query"] = "?" + "&".join(params)
     # Resolve named ports to actual port numbers
     if "port" in found:
         found["port"] = resolve_port(found["port"])
-    # URL-encode query string (encode + as %2B, etc.) while preserving structural chars
     if "query" in found:
         found["query"] = quote(found["query"], safe="?=&,:-")
     return "".join((components | found).values())

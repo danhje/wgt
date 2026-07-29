@@ -98,6 +98,24 @@ def test_generate_url_query(query: str, expected: str) -> None:
     assert url == f"https://127.0.0.1:8080/data{expected}#section"
 
 
+@pytest.mark.parametrize(
+    ("args", "expected_query"),
+    [
+        # Two ?param args merged
+        (["?a=1", "?b=2"], "?a=1&b=2"),
+        # ?param and &param merged
+        (["?a=1", "&b=2"], "?a=1&b=2"),
+        # Multiple &param args
+        (["?a=1", "&b=2", "&c=3"], "?a=1&b=2&c=3"),
+        # Timestamps with timezone
+        (["?time=2026-07-29T14:00+0200", "?wait=True"], "?time=2026-07-29T14:00%2B0200&wait=True"),
+    ],
+)
+def test_generate_url_multiple_query_params(args: list[str], expected_query: str) -> None:
+    url = wgt.generate_url(args)
+    assert url == f"https://127.0.0.1:8080/data{expected_query}#section"
+
+
 @pytest.mark.parametrize("fragment", ("#chapter_one", "#t=1m40s"))
 def test_generate_url_fragment(fragment: str) -> None:
     url = wgt.generate_url([fragment])
