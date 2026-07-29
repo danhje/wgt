@@ -85,11 +85,17 @@ def test_generate_url_path(path: str) -> None:
 
 
 @pytest.mark.parametrize(
-    "query", ("?q=test", "?start=1656502991&end=1656503004", "?q=1,2", "?time=2026-07-29T14:00+0200")
+    ("query", "expected"),
+    [
+        ("?q=test", "?q=test"),
+        ("?start=1656502991&end=1656503004", "?start=1656502991&end=1656503004"),
+        ("?q=1,2", "?q=1,2"),
+        ("?time=2026-07-29T14:00+0200", "?time=2026-07-29T14:00%2B0200"),
+    ],
 )
-def test_generate_url_query(query: str) -> None:
+def test_generate_url_query(query: str, expected: str) -> None:
     url = wgt.generate_url([query])
-    assert url == f"https://127.0.0.1:8080/data{query}#section"
+    assert url == f"https://127.0.0.1:8080/data{expected}#section"
 
 
 @pytest.mark.parametrize("fragment", ("#chapter_one", "#t=1m40s"))

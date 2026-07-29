@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import re
 import sys
+from urllib.parse import quote
 
 import requests
 import rich
@@ -76,6 +77,9 @@ def generate_url(args: list[str]) -> str:
     # Resolve named ports to actual port numbers
     if "port" in found:
         found["port"] = resolve_port(found["port"])
+    # URL-encode query string (encode + as %2B, etc.) while preserving structural chars
+    if "query" in found:
+        found["query"] = quote(found["query"], safe="?=&,:-")
     return "".join((components | found).values())
 
 
